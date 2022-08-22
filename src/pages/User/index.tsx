@@ -210,7 +210,7 @@ const User: React.FC = () => {
           setModalVisible(false);
         }}
         isOpen={modalVisible}
-        size={userToEdit.id ? 1000 : 600}
+        size={userToEdit.id ? 'xl' : 'md'}
       >
         <Form
           ref={formRef}
