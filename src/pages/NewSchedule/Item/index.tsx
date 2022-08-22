@@ -48,7 +48,7 @@ export default function Item({
           title="Informaçōes do agendamento"
           isOpen={modalInfoAppointmentVisible}
           onRequestClose={() => setModalInfoAppointmentVisible(false)}
-          size={500}
+          size="md"
         >
           <ContainerModalInfoAppointment>
             <div>

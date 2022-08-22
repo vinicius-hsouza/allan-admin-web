@@ -671,7 +671,7 @@ export default function ModalCreateAppointment({
           setModalCreateUser(false);
         }}
         isOpen={modalCreateUser}
-        size={600}
+        size="md"
       >
         <Form ref={formRef} onSubmit={handleCreateUser} autoComplete="off">
           <section>

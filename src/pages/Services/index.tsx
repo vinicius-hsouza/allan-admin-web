@@ -149,7 +149,7 @@ const Services: React.FC = () => {
           setModal(false);
         }}
         isOpen={modal}
-        size={600}
+        size="md"
       >
         <Form
           ref={formRef}
