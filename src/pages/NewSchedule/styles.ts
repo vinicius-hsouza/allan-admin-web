@@ -198,13 +198,15 @@ export const CardAppointmentContent = styled.div<CardAppointmentContentProps>`
     `}
 `;
 
+
+
 export const SpanLine = styled.div`
   border: 0.01px solid rgb(52, 50, 51);
   width: 100%;
   min-width: 200px;
-
+/* 
   display: flex;
-  flex-direction: column;
+  flex-direction: column; */
 `;
 
 export const SpanLineHeader = styled.div`

@@ -389,7 +389,7 @@ export default function NewSchedule(): JSX.Element {
                   </p>
                 </span>
                 {providers.map((provider: any) => (
-                  <SpanLine>
+                  <SpanLine >
                     {itemsSchedule?.map((item: any) => {
                       if (
                         new Date(item.date).getHours() === index + 8 &&
