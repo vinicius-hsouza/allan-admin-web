@@ -14,13 +14,14 @@ import * as Yup from 'yup';
 import VMasker from 'vanilla-masker';
 import api from '../../../services/api';
 
-import Button from '../../../components/Button';
-import { Modal } from '@atmoutsourcing/siakit';
+// import Button from '../../../components/Button';
+import { MaskInput, Modal, MoneyInput, Table, TextArea } from '@atmoutsourcing/siakit';
 import { Form, Footer } from '../../../components/Form';
-import Select from '../../../components/Select';
-import Input from '../../../components/Input';
-import Switch from '../../../components/Switch';
+// import Select from '../../../components/Select';
+// import InputMask from '../../../components/InputMask';
+// import Switch from '../../../components/Switch';
 import { useToast } from '../../../hooks/toast';
+import { Select, Input, Switch, Button } from '@atmoutsourcing/siakit';
 
 import ProductDTO from '../../../dtos/ProductDTO';
 
@@ -60,12 +61,12 @@ export default function OrderDetails(): JSX.Element {
   const [modalCloseOrder, setModalCloseOrder] = useState(false);
 
   const [products, setProducts] = useState<ProductDTO[]>([]);
-  const [productToEdit, setProductToEdit] = useState<ProductDTO>(
-    {} as ProductDTO,
+  const [productToEdit, setProductToEdit] = useState<any>(
+    {},
   );
   const [loading, setLoading] = useState(false);
   const [totalPayment, setTotalPayment] = useState(0);
-  const [typePayment, setTypePayment] = useState('dinheiro');
+  const [typePayment, setTypePayment] = useState('DINHEIRO');
   const [services, setServices] = useState<IService[]>([]);
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [totalValue, setTotalValue] = useState(0);
@@ -108,7 +109,11 @@ export default function OrderDetails(): JSX.Element {
       setLoading(true);
       const response = await api.get('/services');
       if (response.data) {
-        setServices(response.data);
+        const serviceIds = order.appointment?.services.map((item: any) => item.id);
+        console.log(serviceIds);
+
+        setServices(response.data.filter((item: any) => !serviceIds?.includes(item.id)));
+
       }
     } catch (err: any) {
       console.error(err);
@@ -362,9 +367,17 @@ export default function OrderDetails(): JSX.Element {
     } else {
       formCloseOrderRef.current?.setFieldValue('totalPayment', order.total);
       setChangeValue(0);
-      setTotalValue(Number(order.total));
+      setTotalValue(Number(order.total) - totalDiscount);
     }
   }, [typePayment, formCloseOrderRef]);
+
+  console.log(productToEdit);
+
+  // useEffect(()=>{
+  //   if(productToEdit.id){
+  //     formRef.current?.setFieldValue('productId', )
+  //   }
+  // },[])
 
   return (
     <Container>
@@ -383,7 +396,7 @@ export default function OrderDetails(): JSX.Element {
                 onSubmit={handleAddProduct}
                 initialData={
                   productToEdit.id
-                    ? { ...productToEdit, productId: productToEdit.id }
+                    ? { ...productToEdit, productId: productToEdit.product_id }
                     : { commission: true }
                 }
               >
@@ -422,6 +435,7 @@ export default function OrderDetails(): JSX.Element {
                 setTotalDiscount(0);
                 setTotalPayment(0);
               }}
+              size="sm"
             >
               <Form
                 ref={formCloseOrderRef}
@@ -429,7 +443,7 @@ export default function OrderDetails(): JSX.Element {
                 initialData={{
                   total: order.total,
                   change: '0.00',
-                  discount: '0.00',
+                  discount: '0,00',
                   totalForPayment: order.total,
                   type_payment: 'DINHEIRO',
                 }}
@@ -439,7 +453,7 @@ export default function OrderDetails(): JSX.Element {
                     name="type_payment"
                     label="Tipo de pagamento"
                     placeholder="Selecione o tipo de pagamento"
-                    onChange={e => setTypePayment(e.target.value)}
+                    onChange={value => { console.log(value); setTypePayment(String(value)) }}
                     options={[
                       {
                         value: 'DINHEIRO',
@@ -463,7 +477,7 @@ export default function OrderDetails(): JSX.Element {
 
                 <section>
                   <InputMask
-                    mask="money"
+                    mask='money'
                     name="discount"
                     label="Desconto (R$)"
                     placeholder="Valor de desconto"
@@ -473,7 +487,7 @@ export default function OrderDetails(): JSX.Element {
 
                 <section>
                   <InputMask
-                    mask="money"
+                    mask='money'
                     name="totalPayment"
                     label="Total Pago"
                     placeholder="Valor pago"
@@ -483,7 +497,7 @@ export default function OrderDetails(): JSX.Element {
                 </section>
 
                 <section>
-                  <Input name="remarks" label="Observações" placeholder="" />
+                  <TextArea name="remarks" label="Observações" placeholder="Observações" />
                 </section>
 
                 <TotalContainer>
@@ -570,31 +584,54 @@ export default function OrderDetails(): JSX.Element {
             </Header>
             <Header>
               <Title>Serviços</Title>
-              <Button size="small" onClick={() => setModalAddServices(true)}>
+              <Button type='button' size="sm" onClick={() => setModalAddServices(true)}>
                 Adicionar serviço
               </Button>
             </Header>
-            <List
+            <Table
               data={order.appointment?.services || []}
-              options={[
-                { title: 'Nome', dataIndex: 'name' },
+              actions={[
                 {
-                  title: 'Duração',
+                  label: 'Excluir',
+                  type: 'danger',
+                  onClick: (item) => {
+                    swal
+                      .fire({
+                        title: 'Confirme!',
+                        text: 'Deseja realmente remover esse serviço?',
+                        icon: 'warning',
+                        confirmButtonText: 'Remover',
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonText: 'Cancelar',
+                        showCancelButton: true,
+                      })
+                      .then(result => {
+                        if (result.isConfirmed) {
+                          handleDeleteServiceOrder(String(item.id));
+                        }
+                      });
+                  }
+                }
+              ]}
+              headers={[
+                { label: 'Nome', dataIndex: 'name' },
+                {
+                  label: 'Duração',
                   dataIndex: 'duration',
-                  render: (row: any) => {
-                    if (row.duration) {
-                      return `${row.duration}min`;
+                  render: ({ item }) => {
+                    if (item.duration) {
+                      return `${item.duration}min`;
                     }
 
                     return '';
                   },
                 },
                 {
-                  title: 'Valor',
+                  label: 'Valor',
                   dataIndex: 'price',
-                  render: (row: any) => {
-                    if (row.price) {
-                      return Number(row.price).toLocaleString('PT-BR', {
+                  render: ({ item }) => {
+                    if (item.price) {
+                      return Number(item.price).toLocaleString('PT-BR', {
                         minimumFractionDigits: 2,
                         style: 'currency',
                         currency: 'BRL',
@@ -603,46 +640,15 @@ export default function OrderDetails(): JSX.Element {
 
                     return '';
                   },
-                },
-                {
-                  title: 'Ação',
-                  dataIndex: 'action',
-                  render: row => (
-                    <Button
-                      size="small"
-                      color="danger"
-                      disabled={order.finished}
-                      onClick={e => {
-                        // handleCloseOrder(row.id);
-                        swal
-                          .fire({
-                            title: 'Confirme!',
-                            text: 'Deseja realmente remover esse serviço?',
-                            icon: 'warning',
-                            confirmButtonText: 'Remover',
-                            confirmButtonColor: '#dc3545',
-                            cancelButtonText: 'Cancelar',
-                            showCancelButton: true,
-                          })
-                          .then(result => {
-                            if (result.isConfirmed) {
-                              handleDeleteServiceOrder(row.id);
-                            }
-                          });
-                        e.stopPropagation();
-                      }}
-                    >
-                      Remover
-                    </Button>
-                  ),
-                },
+                }
               ]}
             />
 
             <Header>
               <Title>Produtos</Title>
               <Button
-                size="small"
+                type='button'
+                size="sm"
                 onClick={() => setModalAddProducts(true)}
                 disabled={order.finished}
               >
@@ -650,27 +656,52 @@ export default function OrderDetails(): JSX.Element {
               </Button>
             </Header>
 
-            <List
-              onClick={(row: any) => {
-                setModalAddProducts(true);
-                setProductToEdit(row);
-              }}
-              data={order.orderProducts || []}
-              options={[
+            <Table
+              actions={[
                 {
-                  title: 'Nome',
+                  label: 'Editar', onClick: (item) => {
+                    setModalAddProducts(true);
+                    setProductToEdit(item);
+                  }
+                },
+                {
+                  label: 'Excluir',
+                  type: 'danger',
+                  onClick: (item) => {
+                    swal
+                      .fire({
+                        title: 'Confirme!',
+                        text: 'Deseja realmente remover esse produto?',
+                        icon: 'warning',
+                        confirmButtonText: 'Remover',
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonText: 'Cancelar',
+                        showCancelButton: true,
+                      })
+                      .then(result => {
+                        if (result.isConfirmed) {
+                          handleDeleteProductOrder(String(item.id));
+                        }
+                      });
+                  }
+                }
+              ]}
+              data={order.orderProducts || []}
+              headers={[
+                {
+                  label: 'Nome',
                   dataIndex: 'product.name',
                 },
                 {
-                  title: 'Quantidade',
+                  label: 'Quantidade',
                   dataIndex: 'amount',
                 },
                 {
-                  title: 'Valor',
+                  label: 'Valor',
                   dataIndex: 'total',
-                  render: row => {
-                    if (row.total) {
-                      return Number(row.total).toLocaleString('PT-BR', {
+                  render: ({ item }) => {
+                    if (item.total) {
+                      return Number(item.total).toLocaleString('PT-BR', {
                         minimumFractionDigits: 2,
                         style: 'currency',
                         currency: 'BRL',
@@ -678,39 +709,7 @@ export default function OrderDetails(): JSX.Element {
                     }
                     return '';
                   },
-                },
-                {
-                  title: 'Ação',
-                  dataIndex: 'action',
-                  render: row => (
-                    <Button
-                      size="small"
-                      color="danger"
-                      disabled={order.finished}
-                      onClick={e => {
-                        // handleCloseOrder(row.id);
-                        swal
-                          .fire({
-                            title: 'Confirme!',
-                            text: 'Deseja realmente remover esse produto?',
-                            icon: 'warning',
-                            confirmButtonText: 'Remover',
-                            confirmButtonColor: '#dc3545',
-                            cancelButtonText: 'Cancelar',
-                            showCancelButton: true,
-                          })
-                          .then(result => {
-                            if (result.isConfirmed) {
-                              handleDeleteProductOrder(row.id);
-                            }
-                          });
-                        e.stopPropagation();
-                      }}
-                    >
-                      Remover
-                    </Button>
-                  ),
-                },
+                }
               ]}
             />
             {/* {!order.orderProducts?.length && (
@@ -807,10 +806,11 @@ export default function OrderDetails(): JSX.Element {
             </span>
             <span>
               <Button
-                color="danger"
-                size="small"
+                colorScheme='red'
+                size="sm"
                 disabled={order.finished}
-                onClick={e => {
+                type="button"
+                onClick={() => {
                   swal
                     .fire({
                       title: 'Confirme!',
@@ -826,14 +826,14 @@ export default function OrderDetails(): JSX.Element {
                         handleCancelOrder();
                       }
                     });
-                  e.stopPropagation();
                 }}
               >
                 Cancelar
               </Button>
               <Button
+                type='button'
                 onClick={() => setModalCloseOrder(true)}
-                size="small"
+                size="sm"
                 disabled={order.finished}
               >
                 Fechar

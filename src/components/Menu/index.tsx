@@ -44,7 +44,7 @@ type Props = {
 
 function Menu({ children }: Props): JSX.Element {
   const { user, signOut } = useAuth();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   if (!user) {
     return <>{children}</>;
@@ -99,6 +99,12 @@ function Menu({ children }: Props): JSX.Element {
           </div>
           <p>Produtos</p>
         </Link>
+        <Link to="/inventory/purchaseproducts">
+          <div>
+            <FaBoxOpen />
+          </div>
+          <p>Lançamento (Produtos)</p>
+        </Link>
         <Link to="/reports">
           <div>
             <FaFileArchive />
@@ -123,10 +129,10 @@ function Menu({ children }: Props): JSX.Element {
       >
         <PageHeader title="Barber">
           <Flex align='center' gap={4}>
-            <Heading size='sm'>v {PackageJSON.version}</Heading>
+            <Heading size='sm' >v {PackageJSON.version}</Heading>
             {/* <LinkButton onClick={() => navigate("/profile")}>{user?.username}</LinkButton> */}
             <Avatar name={user?.username} size="sm" src={user?.avatar_url} />
-            <IconButton icon={<FiPower />} type="button" colorScheme='red' />
+            <IconButton icon={<FiPower />} type="button" colorScheme='red' onClick={() => { signOut(); navigate('/') }} />
           </Flex>
         </PageHeader>
         <Content>

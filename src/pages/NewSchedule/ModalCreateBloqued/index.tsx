@@ -174,7 +174,7 @@ export default function ModalCreateBloqued({
 
         onClose();
       }}
-      size="md"
+      size="sm"
     >
       <ModalBlockHourContainer>
         <h6>Selecione um prestador</h6>

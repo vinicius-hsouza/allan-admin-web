@@ -149,10 +149,12 @@ export const CardAppointmentContent = styled.div<CardAppointmentContentProps>`
   > div {
     margin-left: 16px;
 
-    > h1 {
-      font-size: 16px;
-      font-weight: bold;
-      color: rgb(212, 214, 224);
+    >div{
+      > h1 {
+        font-size: 16px;
+        font-weight: bold;
+        color: rgb(212, 214, 224);
+      }
     }
 
     > p {
@@ -202,6 +204,7 @@ export const SpanLine = styled.div`
   min-width: 200px;
 
   display: flex;
+  flex-direction: column;
 `;
 
 export const SpanLineHeader = styled.div`

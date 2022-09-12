@@ -37,6 +37,7 @@ function AuthProvider({ children }: Props): JSX.Element {
     const token = localStorage.getItem('@AllanHebert:token');
     const user = localStorage.getItem('@AllanHebert:user');
 
+
     if (token && user) {
       api.defaults.headers.common['authorization'] = `Bearer ${token}`;
 

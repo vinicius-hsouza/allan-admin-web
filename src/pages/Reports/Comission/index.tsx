@@ -6,16 +6,17 @@ import { format } from 'date-fns';
 import VMasker from 'vanilla-masker';
 import { FormHandles } from '@unform/core';
 import List from '../../../components/List';
-import Button from '../../../components/Button';
+// import Button from '../../../components/Button';
 import ButtonCSV from '../../../components/ButtonCSV';
 import { Form } from '../../../components/Form';
 import InputMask from '../../../components/InputMask';
-import Select from '../../../components/Select';
+// import Select from '../../../components/Select';
 
 import { Container, Header } from './styles';
 import api from '../../../services/api';
 import { Spin } from '../../../components/Spin';
 import { date, datetime, real } from '../../../utils/especialFormats';
+import { MaskInput, Select, Button } from '@atmoutsourcing/siakit';
 
 type Provider = {
   id: string;
@@ -110,13 +111,13 @@ export default function ReportCommision(): JSX.Element {
                     label: provider.username,
                   }))}
                 />
-                <InputMask
+                <MaskInput
                   name="month"
-                  mask="monthyear"
+                  mask="monthAndYear"
                   placeholder="Digite o mês e o ano"
                 />
                 <Button
-                  size="large"
+                  type='button'
                   onClick={() => formRef.current?.submitForm()}
                 >
                   Buscar

@@ -56,7 +56,7 @@ const SignIn: React.FC = () => {
           password: data.password,
         });
 
-        navigate('/dashboard');
+        navigate('/');
       } catch (err: any) {
         console.log(err);
         if (err instanceof Yup.ValidationError) {
@@ -111,7 +111,7 @@ const SignIn: React.FC = () => {
               </Button>
             </section>
 
-            <Link to="/forgot-password">Esqueci minha senha</Link>
+            {/* <Link to="/forgot-password">Esqueci minha senha</Link> */}
           </Form>
 
           {/* <Link to="/signup">

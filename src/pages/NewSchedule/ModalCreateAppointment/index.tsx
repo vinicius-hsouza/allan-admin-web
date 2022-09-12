@@ -13,7 +13,7 @@ import Button from '../../../components/Button';
 import { Footer, Form } from '../../../components/Form';
 import Input from '../../../components/Input';
 import InputMask from '../../../components/InputMask';
-import { Modal } from '@atmoutsourcing/siakit';
+import { Modal, Switch, Form as FormSIA } from '@atmoutsourcing/siakit';
 import { useToast } from '../../../hooks/toast';
 import api from '../../../services/api';
 import getValidationErrors from '../../../utils/getValidationErrors';
@@ -72,6 +72,7 @@ export default function ModalCreateAppointment({
   const formSearchUser = useRef<FormHandles>(null);
   const formCreateUserRef = useRef<FormHandles>(null);
   const formBlockHourRef = useRef<FormHandles>(null);
+  const formGenericRef = useRef<FormHandles>(null);
 
   const { addToast } = useToast();
   const { setLoading } = useLoading();
@@ -97,6 +98,7 @@ export default function ModalCreateAppointment({
   const [monthSelected, setMothSelected] = useState<Date | undefined>(
     new Date(),
   );
+  const [fit, setFit] = useState(false);
 
   async function loadProviders(): Promise<void> {
     try {
@@ -279,6 +281,7 @@ export default function ModalCreateAppointment({
           date: dateAppointment,
           services: servicesSelected,
           user_id: userSelected.id,
+          fit,
         });
 
         if (response.data) {
@@ -289,11 +292,13 @@ export default function ModalCreateAppointment({
         addToast({
           type: 'success',
           title: '',
-          description: ' Agendamento realizado com sucesso!',
+          description: 'Agendamento realizado com sucesso!',
         });
         setProviderSelectedId(null);
         setServicesSelected([]);
         setHourSelected({});
+        setUserSelected({} as IUser);
+        setFit(false);
       }
       // listHoursAvailable({ year: date.year, month: date.month, day: date.day });
     } catch (err: any) {
@@ -375,14 +380,14 @@ export default function ModalCreateAppointment({
   }, [monthSelected, providerSelectedId]);
 
   useEffect(() => {
-    if (providerSelectedId && selectedDate) {
+    if (providerSelectedId && selectedDate && !!servicesSelected.length) {
       listHoursAvailable({
         month: selectedDate.getMonth() + 1,
         year: selectedDate.getFullYear(),
         day: selectedDate.getDate(),
       });
     }
-  }, [providerSelectedId, selectedDate]);
+  }, [providerSelectedId, selectedDate, servicesSelected]);
 
   useEffect(() => {
     loadProviders();
@@ -401,6 +406,7 @@ export default function ModalCreateAppointment({
           setServicesSelected([]);
           setHourSelected({});
           setUserSelected({} as IUser);
+          setFit(false);
 
           if (onClose) {
             onClose();
@@ -593,6 +599,10 @@ export default function ModalCreateAppointment({
                 />
               </Calendar>
             </ContainerItemSelect>
+            <h6>Tipo de agendamento</h6>
+            <FormSIA ref={formGenericRef} onSubmit={() => undefined} initialData={{ fit: fit }} padding>
+              <Switch name="fit" label="Encaixe?" onChange={value => setFit(value as boolean)} />
+            </FormSIA>
             <h6>Horas disponiveis</h6>
             <ContainerItemSelect>
               {hours.map((hour: any) => {
@@ -646,7 +656,7 @@ export default function ModalCreateAppointment({
           {usersSearch.map(user => (
             <UserSelectItem
               selected={userSelected.id === user.id}
-              onClick={() => setUserSelected(user)}
+              onClick={() => { setUserSelected(user); setModalSelectUser(false); }}
             >
               <img src={user.avatar_url} alt="" />
               <div>

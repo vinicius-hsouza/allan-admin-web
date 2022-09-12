@@ -7,7 +7,7 @@ import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { IoLogoWhatsapp } from 'react-icons/io5';
 import Swal from 'sweetalert2';
 import { toPattern } from 'vanilla-masker';
-import { Modal } from '@atmoutsourcing/siakit';
+import { Badge, Modal } from '@atmoutsourcing/siakit';
 import { useLoading } from '../../../hooks/loading';
 import { useToast } from '../../../hooks/toast';
 
@@ -143,10 +143,10 @@ export default function Item({
         </Modal>
         <CardAppointment
           duration={(data.duration / 30) * 50}
-          style={{
-            marginTop:
-              new Date(data.appointment?.date).getMinutes() < 30 ? 0 : 60,
-          }}
+          // style={{
+          //   marginTop:
+          //     new Date(data.appointment?.date).getMinutes() < 30 ? 0 : 60,
+          // }}
           onClick={() => setModalInfoAppointmentVisible(true)}
         >
           <CardAppointmentContent
@@ -155,7 +155,10 @@ export default function Item({
           >
             <img src={data.appointment?.user.avatar_url} alt="userAvatar" />
             <div>
-              <h1>{data.appointment?.user.username}</h1>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <h1>{data.appointment?.user.username}</h1>
+                {data.appointment.fit && <Badge color='orange'>Encaixe</Badge>}
+              </div>
               {data.appointment?.services?.map((service: any) => (
                 <p>{service.name}</p>
               ))}

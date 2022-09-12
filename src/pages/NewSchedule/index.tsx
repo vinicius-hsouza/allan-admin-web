@@ -25,6 +25,7 @@ import api from '../../services/api';
 import Item from './Item';
 import ModalCreateAppointment from './ModalCreateAppointment';
 import ModalCreateBloqued from './ModalCreateBloqued';
+import { Avatar } from '@atmoutsourcing/siakit';
 
 import {
   Container,
@@ -343,7 +344,7 @@ export default function NewSchedule(): JSX.Element {
             {providers.map((item: any) => (
               <SpanLineHeader>
                 <div>
-                  <img src={item.avatar_url} alt="providerAvatar" />
+                  <Avatar src={item?.avatar_url} name={item?.username} />
                   <p>{item?.username}</p>
                 </div>
                 <div>

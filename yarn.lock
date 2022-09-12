@@ -19,10 +19,10 @@
     jsonpointer "^5.0.0"
     leven "^3.1.0"
 
-"@atmoutsourcing/siakit@^0.1.36":
-  version "0.1.36"
-  resolved "https://registry.yarnpkg.com/@atmoutsourcing/siakit/-/siakit-0.1.36.tgz#03269d07019939d583815944341621d024094d20"
-  integrity sha512-wif0QLoz+BcVCgNRqz4Ou0x6LdKRyWMrXNWsIqZ9xowUc5yo5rAT/MJW2cAiDvHPnDW46h2PY6/mKsOLUQ5UQw==
+"@atmoutsourcing/siakit@^0.1.43":
+  version "0.1.43"
+  resolved "https://registry.yarnpkg.com/@atmoutsourcing/siakit/-/siakit-0.1.43.tgz#d88cab1ce5f5f28314259d5d92854dcbee428a2b"
+  integrity sha512-AEd1A7+bpYZp6gp92e8EcR8Tj/v6MAlXjhL1p5zrsB8S0TX5kKtvqziKg/ae3PxhhpPHnGwqH+ft9iFshKXBAQ==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.16.0", "@babel/code-frame@^7.18.6", "@babel/code-frame@^7.8.3":
   version "7.18.6"

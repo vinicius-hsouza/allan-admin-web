@@ -1,3 +1,4 @@
+import { toast } from '@atmoutsourcing/siakit';
 import axios from 'axios';
 
 const api = axios.create({
@@ -9,6 +10,7 @@ api.interceptors.response.use(
     return response;
   },
   error => {
+    toast.danger({ title: 'Erro', text: error.response?.data?.message || 'Houve um erro ao processar sua solicitação' });
     return Promise.reject(error.response);
   },
 );
