@@ -38,6 +38,7 @@ interface ContentProps {
 export const Content = styled.div<ContentProps>`
   display: grid;
   grid-template-columns: 64px repeat(${props => props.columns}, 2fr);
+  grid-template-rows: 64px;
 `;
 
 export const HoursColumn = styled.div`
@@ -51,6 +52,9 @@ interface CardAppointmentProps {
 export const CardAppointment = styled.div<CardAppointmentProps>`
   /* margin-top: 50%; */
   height: 50%;
+  // background: tomato;
+  display: flex;
+  position: absolute;
 
   ${props =>
     props.duration &&
@@ -204,6 +208,9 @@ export const SpanLine = styled.div`
   border: 0.01px solid rgb(52, 50, 51);
   width: 100%;
   min-width: 200px;
+  position: relative;
+  
+  display: flex;
 /* 
   display: flex;
   flex-direction: column; */

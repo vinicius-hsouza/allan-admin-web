@@ -350,6 +350,7 @@ export default function ModalCreateAppointment({
             day,
             timeService: maxBy(servicesSelected, 'duration')?.duration,
             isProvider: true,
+            fit,
           },
         },
       );
@@ -387,7 +388,7 @@ export default function ModalCreateAppointment({
         day: selectedDate.getDate(),
       });
     }
-  }, [providerSelectedId, selectedDate, servicesSelected]);
+  }, [providerSelectedId, selectedDate, servicesSelected, fit]);
 
   useEffect(() => {
     loadProviders();

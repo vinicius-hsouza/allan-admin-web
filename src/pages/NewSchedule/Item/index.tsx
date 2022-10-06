@@ -7,7 +7,7 @@ import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { IoLogoWhatsapp } from 'react-icons/io5';
 import Swal from 'sweetalert2';
 import { toPattern } from 'vanilla-masker';
-import { Badge, Modal } from '@atmoutsourcing/siakit';
+import {Badge, Modal, Text, Heading, Avatar} from '@atmoutsourcing/siakit';
 import { useLoading } from '../../../hooks/loading';
 import { useToast } from '../../../hooks/toast';
 
@@ -142,7 +142,7 @@ export default function Item({
           </ContainerModalInfoAppointment>
         </Modal>
         <CardAppointment
-          duration={(data.duration / 30) * 50}
+          duration={(data.duration / 30) * 100}
           // style={{
           //   marginTop:
           //     new Date(data.appointment?.date).getMinutes() < 30 ? 0 : 60,
@@ -151,17 +151,25 @@ export default function Item({
         >
           <CardAppointmentContent
             colorStatus={data.appointment?.status.color}
-            duration={(data.duration / 30) * 50}
+            duration={(data.duration / 30) * 100}
           >
-            <img src={data.appointment?.user.avatar_url} alt="userAvatar" />
+            {/*<img src={data.appointment?.user.avatar_url} alt="userAvatar" />*/}
+            <Avatar name={data.appointment?.user.username?.trim()} src={data.appointment?.user.avatar_url} size="md" />
             <div>
               <div style={{ display: 'flex', gap: 8 }}>
-                <h1>{data.appointment?.user.username}</h1>
+                <Heading size="md">{data.appointment?.user.username}</Heading>
                 {data.appointment.fit && <Badge color='orange'>Encaixe</Badge>}
               </div>
-              {data.appointment?.services?.map((service: any) => (
-                <p>{service.name}</p>
-              ))}
+              <div style={{display: 'flex'}}>
+              {data.appointment?.services?.map((service: any, index: number) =>
+              {
+                if(index === 0){
+                  return <Text size="sm" >{service.name}</Text>;
+                }
+
+                return <Text size="sm">, {service.name}</Text>;
+              })}
+              </div>
             </div>
             <div>
               <div style={{ background: data.appointment?.status.color }} />
@@ -229,10 +237,10 @@ export default function Item({
           </ContainerModalInfoBloqued>
         </Modal>
         <CardAppointment
-          duration={(data.duration / 30) * 50}
+          duration={(data.duration / 30) * 100}
           onClick={() => setModalInfoBloquedVisible(true)}
         >
-          <CardBloquedContent duration={(data.duration / 30) * 50}>
+          <CardBloquedContent duration={(data.duration / 30) * 100}>
             <h1>Bloqueado</h1>
             <p>{data.bloqued.reason || 'Sem Motivo'}</p>
           </CardBloquedContent>
@@ -244,10 +252,10 @@ export default function Item({
   if (data.type === 'lunch') {
     return (
       <CardAppointment
-        duration={(data.duration / 30) * 50}
+        duration={(data.duration / 30) * 100}
         onClick={() => setModalInfoBloquedVisible(true)}
       >
-        <CardLunchContent duration={(data.duration / 30) * 50}>
+        <CardLunchContent duration={(data.duration / 30) * 100}>
           <h1>Almoço</h1>
           {/* <p>Almoço</p> */}
         </CardLunchContent>
