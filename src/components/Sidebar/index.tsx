@@ -1,18 +1,16 @@
+// import {
+//   FaBookOpen,
+//   FaDollarSign,
+//   FaFileArchive,
+//   FaSprayCan,
+//   FaUsers,
+// } from 'react-icons/fa'
+// import { IoIosCut, IoIosCalendar } from 'react-icons/io'
+// import { IoSettings } from 'react-icons/io5'
 
-import { IoIosCut, IoIosCalendar } from 'react-icons/io';
-import { IoSettings } from 'react-icons/io5';
-import {
-  FaBookOpen,
-  FaDollarSign,
-  FaFileArchive,
-  FaSprayCan,
-  FaUsers,
-} from 'react-icons/fa';
-import logoImg from '../../assets/logo.png';
+// import logoImg from '../../assets/logo.png'
 
-
-export function SideBar(): JSX.Element {
-  return <p>teste</p>
+export function SideBar() {
   // return (
   //   <Sidebar>
   //     <Menu>
@@ -61,5 +59,5 @@ export function SideBar(): JSX.Element {
   //     <SubMenuItem />
   //   </SubMenu> */}
   //   </Sidebar >
-  )
+  return <p>teste</p>
 }
