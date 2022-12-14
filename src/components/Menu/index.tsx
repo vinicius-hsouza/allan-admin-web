@@ -1,30 +1,25 @@
 import React from 'react'
 import {
   FaBookOpen,
-  FaBox,
   FaBoxOpen,
-  FaChartPie,
   FaDollarSign,
   FaFileArchive,
   FaSprayCan,
   FaUsers,
 } from 'react-icons/fa'
-import { FiArrowDown, FiChevronDown, FiPower } from 'react-icons/fi'
+import { FiChevronDown, FiPower } from 'react-icons/fi'
 import { IoIosCut, IoIosCalendar } from 'react-icons/io'
 import { IoSettings } from 'react-icons/io5'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Avatar } from '@siakit/avatar'
 import {
   Dropdown,
   DropdownContent,
   DropdownItem,
-  DropdownLabel,
-  DropdownSeparator,
   DropdownTrigger,
 } from '@siakit/dropdown'
 import { Heading } from '@siakit/heading'
-import { IconButton } from '@siakit/icon-button'
 import { Flex } from '@siakit/layout'
 import { PageHeader } from '@siakit/page-header'
 import { Text } from '@siakit/text'
@@ -38,7 +33,7 @@ type Props = {
   children?: React.ReactNode
 }
 
-function Menu({ children }: Props): JSX.Element {
+function Menu({ children }: Props) {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
 
@@ -123,7 +118,7 @@ function Menu({ children }: Props): JSX.Element {
       <div
         style={{ display: 'flex', overflow: 'auto', flexDirection: 'column' }}
       >
-        <PageHeader title="Barber" as="div">
+        <PageHeader title="Barber">
           <Flex align="center" gap={4}>
             <Heading size="xs" lowContrast>
               v {PackageJSON.version}

@@ -26,7 +26,7 @@
     "@siakit/layout": "^0.0.8",
     "@siakit/loading": "^0.0.3",
     "@siakit/modal": "^0.0.13",
-    "@siakit/page-header": "^0.0.7",
+    "@siakit/page-header": "^0.0.9",
     "@siakit/separator": "^0.0.3",
     "@siakit/spacer": "^0.0.2",
     "@siakit/table": "^0.0.6",

@@ -2880,10 +2880,10 @@
     "@siakit/icon-button" "*"
     "@siakit/layout" "*"
 
-"@siakit/page-header@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@siakit/page-header/-/page-header-0.0.7.tgz#4b11bdba30e83a4d752624de7291c4955d8aaf1f"
-  integrity sha512-Qa2MsczdmeVH1An6U4jPRgP8z+wCFSw9uXQSCR3x/0C29LS51rweDUG7RYC3aOoMoAIvB03L+BwT/OS83pMTvg==
+"@siakit/page-header@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@siakit/page-header/-/page-header-0.0.9.tgz#200c949a086da34bd3592d4835b55c5209fcb571"
+  integrity sha512-vyXp2kRB5MnZZjZAoaZYSzMBZK7/7EIUkg4igfzGmDPj704pWXjmWyL4udmROWtdj+k+R/DK2mvptM4B+MPsnw==
   dependencies:
     "@siakit/card" "*"
     "@siakit/core" "*"
