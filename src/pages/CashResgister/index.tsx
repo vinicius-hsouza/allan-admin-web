@@ -330,7 +330,10 @@ export default function CashRegister(): JSX.Element {
               if (!item.created_at) {
                 return ''
               }
-              return format(new Date(item.created_at as string), 'dd/MM/yyyy')
+              return format(
+                new Date(item.created_at as string),
+                'dd/MM/yyyy HH:mm:ss',
+              )
             },
           },
           {

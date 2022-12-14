@@ -11,6 +11,7 @@ import { debounce, maxBy } from 'lodash'
 import * as Yup from 'yup'
 
 import { Switch } from '@siakit/form-unform'
+import { Flex } from '@siakit/layout'
 import { Modal, ModalContent } from '@siakit/modal'
 import { FormHandles } from '@unform/core'
 
@@ -609,11 +610,13 @@ export default function ModalCreateAppointment({
                 onSubmit={() => undefined}
                 initialData={{ fit }}
               >
-                <Switch
-                  name="fit"
-                  label="Encaixe?"
-                  onChange={(value) => setFit(value as boolean)}
-                />
+                <Flex padding>
+                  <Switch
+                    name="fit"
+                    label="Encaixe?"
+                    onChange={(value) => setFit(value as boolean)}
+                  />
+                </Flex>
               </Form>
               <h6>Horas disponiveis</h6>
               <ContainerItemSelect>
