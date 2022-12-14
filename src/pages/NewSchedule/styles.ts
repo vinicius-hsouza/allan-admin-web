@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-import { lighten, shade } from 'polished';
+import { lighten, shade } from 'polished'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   display: flex;
@@ -11,7 +11,7 @@ export const Container = styled.div`
   .rdp-day_today:not(.rdp-day_outside) {
     color: red;
   }
-`;
+`
 export const Header = styled.div`
   padding: 8px 16px 8px 64px;
 
@@ -29,24 +29,27 @@ export const Header = styled.div`
       margin-left: 4px;
     }
   }
-`;
+`
 
 interface ContentProps {
-  columns: number;
+  columns: number
 }
 
 export const Content = styled.div<ContentProps>`
   display: grid;
-  grid-template-columns: 64px repeat(${props => props.columns}, 2fr);
+  grid-template-columns: 64px repeat(
+      ${(props) => props.columns},
+      minmax(400px, 1fr)
+    );
   grid-template-rows: 64px;
-`;
+`
 
 export const HoursColumn = styled.div`
   background: red;
-`;
+`
 
 interface CardAppointmentProps {
-  duration?: number;
+  duration?: number
 }
 
 export const CardAppointment = styled.div<CardAppointmentProps>`
@@ -56,7 +59,7 @@ export const CardAppointment = styled.div<CardAppointmentProps>`
   display: flex;
   position: absolute;
 
-  ${props =>
+  ${(props) =>
     props.duration &&
     css`
       height: ${props.duration}%;
@@ -69,7 +72,7 @@ export const CardAppointment = styled.div<CardAppointmentProps>`
   display: flex;
   /* align-items: center; */
   padding: 4px;
-`;
+`
 
 export const CardBloquedContent = styled.div<CardAppointmentProps>`
   background: rgb(52, 50, 51);
@@ -98,7 +101,7 @@ export const CardBloquedContent = styled.div<CardAppointmentProps>`
     font-size: 18px;
     font-weight: bold;
   }
-`;
+`
 
 export const CardLunchContent = styled.div<CardAppointmentProps>`
   background: rgba(35, 123, 195, 0.4);
@@ -127,22 +130,24 @@ export const CardLunchContent = styled.div<CardAppointmentProps>`
     color: #aeb0b4;
     font-size: 18px;
   }
-`;
+`
 
 interface CardAppointmentContentProps {
-  colorStatus?: string;
-  duration?: number;
+  colorStatus?: string
+  duration?: number
 }
 
 export const CardAppointmentContent = styled.div<CardAppointmentContentProps>`
   background: rgb(52, 50, 51);
   flex: 1;
   border-radius: 8px;
-  z-index: 10;
+  z-index: 1;
   padding: 8px;
 
   display: flex;
   align-items: center;
+
+  gap: 8px;
 
   cursor: pointer;
 
@@ -150,10 +155,10 @@ export const CardAppointmentContent = styled.div<CardAppointmentContentProps>`
     opacity: 0.9;
   }
 
-  > div {
+  /* > div {
     margin-left: 16px;
 
-    >div{
+    > div {
       > h1 {
         font-size: 16px;
         font-weight: bold;
@@ -183,16 +188,16 @@ export const CardAppointmentContent = styled.div<CardAppointmentContentProps>`
         margin-right: 4px;
       }
     }
-  }
+  } */
 
-  > img {
+  /* > img {
     height: 48px;
     width: 48px;
     border-radius: 50%;
     border: 0.01px solid #ff8503;
-  }
+  } */
 
-  ${props =>
+  ${(props) =>
     props.duration === 50 &&
     css`
       > img {
@@ -200,21 +205,18 @@ export const CardAppointmentContent = styled.div<CardAppointmentContentProps>`
         width: 42px;
       }
     `}
-`;
-
-
+`
 
 export const SpanLine = styled.div`
   border: 0.01px solid rgb(52, 50, 51);
   width: 100%;
   min-width: 200px;
   position: relative;
-  
   display: flex;
-/* 
+  /* 
   display: flex;
   flex-direction: column; */
-`;
+`
 
 export const SpanLineHeader = styled.div`
   border: 0.01px solid rgb(52, 50, 51);
@@ -223,7 +225,7 @@ export const SpanLineHeader = styled.div`
   position: sticky;
   top: 0;
   padding: 8px;
-  z-index: 11;
+  z-index: 0;
 
   border-radius: 8px 8px 0 0;
 
@@ -256,4 +258,4 @@ export const SpanLineHeader = styled.div`
       font-weight: bold;
     }
   }
-`;
+`

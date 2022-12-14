@@ -1,7 +1,7 @@
-import styled, { keyframes } from 'styled-components';
-import { shade } from 'polished';
+import { shade } from 'polished'
+import styled, { keyframes } from 'styled-components'
 
-import signInBackgroundImg from '../../assets/sign-in-background.png';
+import signInBackgroundImg from '../../assets/sign-in-background.png'
 
 export const Container = styled.div`
   height: 100vh;
@@ -13,7 +13,7 @@ export const Container = styled.div`
   flex: 1;
   background: url(${signInBackgroundImg}) no-repeat center;
   background-size: cover;
-`;
+`
 
 export const Content = styled.div`
   display: flex;
@@ -24,16 +24,16 @@ export const Content = styled.div`
   background: #121214;
   border-radius: 8px;
 
-  height: 80vh;
+  height: 60vh;
 
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
 
   @media (max-width: 596px) {
     height: 100vh;
     border-radius: 0;
   }
-`;
+`
 
 const appearFromLeft = keyframes`
   from {
@@ -44,7 +44,7 @@ const appearFromLeft = keyframes`
     opacity: 1;
     transform: translateX(0);
   }
-`;
+`
 
 export const AnimationContainer = styled.div`
   display: flex;
@@ -55,13 +55,13 @@ export const AnimationContainer = styled.div`
   animation: ${appearFromLeft} 1s;
 
   > img {
-    height: 200px;
+    height: 150px;
   }
 
   > form {
     margin: 40px 0;
     width: 340px;
-    text-align: center;
+    /* text-align: center; */
 
     h1 {
       margin-bottom: 24px;
@@ -81,7 +81,7 @@ export const AnimationContainer = styled.div`
   }
 
   > a {
-    color: #ff9000;
+    color: #ff8503;
     display: block;
     margin-top: 24px;
     text-decoration: none;
@@ -95,13 +95,13 @@ export const AnimationContainer = styled.div`
     }
 
     &:hover {
-      color: ${shade(0.2, '#ff9000')};
+      color: ${shade(0.2, '#ff8503')};
     }
   }
-`;
+`
 
 export const Background = styled.div`
   flex: 1;
   background: url(${signInBackgroundImg}) no-repeat center;
   background-size: cover;
-`;
+`

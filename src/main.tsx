@@ -1,12 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+
+import { Provider as SiakitProvider } from '@siakit/core'
+import { LoadingProvider } from '@siakit/loading'
+import { ToastProvider } from '@siakit/toast'
+
 import App from './App'
-import { SiakitProvider } from '@atmoutsourcing/siakit';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <SiakitProvider>
-      <App />
+      <LoadingProvider>
+        <ToastProvider>
+          <App />
+        </ToastProvider>
+      </LoadingProvider>
     </SiakitProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

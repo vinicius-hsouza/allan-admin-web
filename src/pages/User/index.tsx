@@ -1,155 +1,153 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
-import VMasker from 'vanilla-masker';
-import { FaStar } from 'react-icons/fa';
-import { FormHandles } from '@unform/core';
+import React, { useEffect, useState, useRef } from 'react'
+import { FaBirthdayCake } from 'react-icons/fa'
 // import { Form } from '@unform/web';
-import { FiUser, FiPhone } from 'react-icons/fi';
-import { IoPhonePortraitOutline } from 'react-icons/io5';
-import { FaBirthdayCake } from 'react-icons/fa';
-import * as Yup from 'yup';
+import { FiUser } from 'react-icons/fi'
+import { IoPhonePortraitOutline } from 'react-icons/io5'
 
-import { MdEdit } from 'react-icons/md';
-import Wrapper from '../../components/Wrapper';
-import Input from '../../components/Input';
-import InputMask from '../../components/InputMask';
-import Switch from '../../components/Switch';
-import { Modal } from '@atmoutsourcing/siakit';
-import { Form, Footer } from '../../components/Form';
-import { useToast } from '../../hooks/toast';
+import VMasker from 'vanilla-masker'
+import * as Yup from 'yup'
 
-import api from '../../services/api';
+import { Modal, ModalContent } from '@siakit/modal'
+import { FormHandles } from '@unform/core'
 
-import { ListUser, Header, Card, Container, ContainerHourWork } from './styles';
-import Button from '../../components/Button';
-import getValidationErrors from '../../utils/getValidationErrors';
-import { useLoading } from '../../hooks/loading';
-import List from '../../components/List';
-import NewDropdown from '../../components/NewDropdown';
-import { OperationWork } from '../ConfigBarberHour/styles';
+import Button from '../../components/Button'
+import { Form, Footer } from '../../components/Form'
+import Input from '../../components/Input'
+import InputMask from '../../components/InputMask'
+import List from '../../components/List'
+import Switch from '../../components/Switch'
+import { useLoading } from '../../hooks/loading'
+import { useToast } from '../../hooks/toast'
+import api from '../../services/api'
+import getValidationErrors from '../../utils/getValidationErrors'
+import { OperationWork } from '../ConfigBarberHour/styles'
+import { ListUser, Header, Card, Container, ContainerHourWork } from './styles'
 
-interface User {
-  id: string;
-  username: string;
-  phone: string;
-  avatar_url: string;
-  dateBirthFormatted?: string;
-  providerWorkHour: any;
-  isProvider: boolean;
+interface IUser {
+  id: string
+  username: string
+  phone: string
+  avatar_url: string
+  dateBirthFormatted?: string
+  providerWorkHour: any
+  isProvider: boolean
 }
 
 const User: React.FC = () => {
-  const formRef = useRef<FormHandles>(null);
-  const formSearchRef = useRef<FormHandles>(null);
-  const formProviderHourRef = useRef<FormHandles>(null);
-  const { addToast } = useToast();
-  const { setLoading } = useLoading();
+  const formRef = useRef<FormHandles>(null)
+  const formSearchRef = useRef<FormHandles>(null)
+  const formProviderHourRef = useRef<FormHandles>(null)
+  const { addToast } = useToast()
+  const { setLoading } = useLoading()
 
-  const [users, setUsers] = useState<User[]>([]);
-  const [userToEdit, setUserToEdit] = useState<User>({} as User);
-  const [providerHourEdit, setProviderHourEdit] = useState<any>({});
-  const [modalVisible, setModalVisible] = useState(false);
+  const [users, setUsers] = useState<IUser[]>([])
+  const [userToEdit, setUserToEdit] = useState<IUser>({} as IUser)
+  const [providerHourEdit, setProviderHourEdit] = useState<any>({})
+  const [modalVisible, setModalVisible] = useState(false)
   const [params, setParams] = useState({
     page: 1,
     pageCount: 30,
     search: '',
-  });
+  })
 
   async function loadUsers(): Promise<void> {
     try {
-      setLoading(true);
+      setLoading(true)
       const response = await api.get('users', {
         params,
-      });
+      })
       if (params.page === 1) {
-        setUsers(response.data);
+        setUsers(response.data)
       } else {
-        setUsers(state => [...state, ...response.data]);
+        setUsers((state) => [...state, ...response.data])
       }
     } catch (err: any) {
-      console.error(err?.data?.message);
+      console.error(err?.data?.message)
       addToast({
         title:
           err?.data?.message || 'Houve um erro ao tentar listar os usuários',
         type: 'error',
-      });
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   async function handleSubmit(data: any): Promise<void> {
     try {
-      setLoading(true);
-      formRef.current?.setErrors({});
+      setLoading(true)
+      formRef.current?.setErrors({})
 
-      const [day, month, year] = data?.dateBirth?.split('/');
+      const [day, month, year] = data?.dateBirth?.split('/')
 
-      const dateBirth = new Date(year, month - 1, day);
+      const dateBirth = new Date(year, month - 1, day)
 
       const schema = Yup.object().shape({
         username: Yup.string().required('Campo obrigatório'),
         phone: Yup.string().required('Campo obrigatório'),
-      });
+      })
 
-      await schema.validate(data, { abortEarly: false });
+      await schema.validate(data, { abortEarly: false })
 
       if (userToEdit.id) {
         const response = await api.put(`/users/${userToEdit.id}`, {
           ...data,
           dateBirth,
-        });
+        })
 
         addToast({
           title: 'Usuário atualizado com sucesso',
           type: 'success',
-        });
+        })
 
         setUsers(
-          users.map(user => (user.id === userToEdit.id ? response.data : user)),
-        );
+          users.map((user) =>
+            user.id === userToEdit.id ? response.data : user,
+          ),
+        )
 
         if (!response.data.isProvider) {
-          setModalVisible(false);
+          setModalVisible(false)
         } else {
-          setUserToEdit(response.data);
+          setUserToEdit(response.data)
         }
       } else {
-        const response = await api.post('/users', { ...data, dateBirth });
+        const response = await api.post('/users', { ...data, dateBirth })
 
         addToast({
           title: 'Novo usuário criado com sucesso',
           type: 'success',
-        });
+        })
 
-        setUsers([...users, response.data]);
+        setUsers([...users, response.data])
 
         if (!response.data.isProvider) {
-          setModalVisible(false);
+          setModalVisible(false)
         } else {
-          setUserToEdit(response.data);
+          setUserToEdit(response.data)
         }
       }
     } catch (err: any) {
       if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+        const errors = getValidationErrors(err)
 
-        formRef.current?.setErrors(errors);
+        formRef.current?.setErrors(errors)
       }
 
       addToast({
         title:
           err?.data?.message || 'Houve um erro ao tentar criar um usuários',
         type: 'error',
-      });
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   async function handleModifyProviderHour(data: any): Promise<void> {
     try {
-      setLoading(true);
-      formProviderHourRef.current?.setErrors({});
+      setLoading(true)
+      formProviderHourRef.current?.setErrors({})
 
       const schema = Yup.object().shape({
         startTimeWork: Yup.string().required('Campo obrigatório'),
@@ -157,145 +155,147 @@ const User: React.FC = () => {
         endLunch: Yup.string().required('Campo obrigatório'),
         endTimeWork: Yup.string().required('Campo obrigatório'),
         isOpenWork: Yup.string().required('Campo obrigatório'),
-      });
+      })
 
-      await schema.validate(data, { abortEarly: false });
+      await schema.validate(data, { abortEarly: false })
 
       const response = await api.put(
         `/users/providerHourWork/${providerHourEdit.id}`,
         data,
-      );
+      )
 
       if (response.data?.id) {
-        setUserToEdit(prevState => ({
+        setUserToEdit((prevState) => ({
           ...prevState,
           providerWorkHour: prevState.providerWorkHour.map((item: any) =>
             item.id === providerHourEdit.id ? response.data : item,
           ),
-        }));
+        }))
 
-        setProviderHourEdit({});
+        setProviderHourEdit({})
         addToast({
           title: 'Horário de trabalho atualizado com sucesso',
           type: 'success',
-        });
+        })
       }
     } catch (err: any) {
       if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+        const errors = getValidationErrors(err)
 
-        formProviderHourRef.current?.setErrors(errors);
+        formProviderHourRef.current?.setErrors(errors)
       }
 
       addToast({
         title:
           err?.data?.message || 'Houve um erro ao tentar criar um usuários',
         type: 'error',
-      });
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   useEffect(() => {
-    loadUsers();
-  }, [params]);
+    loadUsers()
+  }, [params])
 
   return (
     <Container>
       <Modal
-        title={userToEdit.id ? 'Editar usuário' : 'Novo usuário'}
-        onRequestClose={() => {
-          setUserToEdit({} as User);
-          setModalVisible(false);
+        onOpenChange={() => {
+          setUserToEdit({} as IUser)
+          setModalVisible(false)
         }}
-        isOpen={modalVisible}
-        size={userToEdit.id ? 'xl' : 'md'}
+        open={modalVisible}
       >
-        <Form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          autoComplete="off"
-          initialData={{
-            ...userToEdit,
-            dateBirth: userToEdit?.dateBirthFormatted,
-          }}
+        <ModalContent
+          title={userToEdit.id ? 'Editar usuário' : 'Novo usuário'}
+          size={userToEdit.id ? 'xl' : 'md'}
         >
-          <section>
-            <Input
-              name="username"
-              placeholder="Nome do usuário"
-              label="Nome (Obrigatório)"
-              icon={FiUser}
-            />
+          <Form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            autoComplete="off"
+            initialData={{
+              ...userToEdit,
+              dateBirth: userToEdit?.dateBirthFormatted,
+            }}
+          >
+            <section>
+              <Input
+                name="username"
+                placeholder="Nome do usuário"
+                label="Nome (Obrigatório)"
+                icon={FiUser}
+              />
 
-            <InputMask
-              mask="phone"
-              label="Celular (Obrigatório)"
-              name="phone"
-              placeholder="Digite o numero do celular"
-              icon={IoPhonePortraitOutline}
-            />
+              <InputMask
+                mask="phone"
+                label="Celular (Obrigatório)"
+                name="phone"
+                placeholder="Digite o numero do celular"
+                icon={IoPhonePortraitOutline}
+              />
 
-            <InputMask
-              name="dateBirth"
-              mask="date"
-              label="Data de nascimento (Obrigatório)"
-              placeholder="Digite a data de nascimento"
-              icon={FaBirthdayCake}
-            />
-          </section>
+              <InputMask
+                name="dateBirth"
+                mask="date"
+                label="Data de nascimento (Obrigatório)"
+                placeholder="Digite a data de nascimento"
+                icon={FaBirthdayCake}
+              />
+            </section>
 
-          <section>
-            <Switch
-              orientation="vertical"
-              name="isAdmin"
-              label="Administrador?"
-            />
+            <section>
+              <Switch
+                orientation="vertical"
+                name="isAdmin"
+                label="Administrador?"
+              />
 
-            <Switch
-              orientation="vertical"
-              name="isProvider"
-              label="Prestador?"
-            />
-          </section>
-          {userToEdit?.isProvider && (
-            <ContainerHourWork>
-              <List
-                data={userToEdit?.providerWorkHour}
-                options={[
-                  { title: 'Dia da Semana', dataIndex: 'dayLabel' },
-                  {
-                    title: 'Inicio de trabalho',
-                    dataIndex: 'startTimeWork',
-                  },
-                  { title: 'Inicio de almoço', dataIndex: 'startLunch' },
-                  { title: 'Fim do almoço', dataIndex: 'endLunch' },
-                  { title: 'Fim de trabalho', dataIndex: 'endTimeWork' },
-                  {
-                    title: 'Faz atendimento?',
-                    dataIndex: 'isOpenWork',
-                    render: row => (
-                      <OperationWork open={!row.isOpenWork}>
-                        <div />
-                        <p>{row.isOpenWork ? 'Atende' : 'Não atende'}</p>
-                      </OperationWork>
-                    ),
-                  },
-                  {
-                    title: 'Ação',
-                    dataIndex: '',
-                    render: row => (
-                      <>
-                        <Button
-                          size="small"
-                          onClick={() => {
-                            setProviderHourEdit(row);
-                          }}
-                        >
-                          Editar
-                        </Button>
-                        {/* <NewDropdown
+              <Switch
+                orientation="vertical"
+                name="isProvider"
+                label="Prestador?"
+              />
+            </section>
+            {userToEdit?.isProvider && (
+              <ContainerHourWork>
+                <List
+                  data={userToEdit?.providerWorkHour}
+                  options={[
+                    { title: 'Dia da Semana', dataIndex: 'dayLabel' },
+                    {
+                      title: 'Inicio de trabalho',
+                      dataIndex: 'startTimeWork',
+                    },
+                    { title: 'Inicio de almoço', dataIndex: 'startLunch' },
+                    { title: 'Fim do almoço', dataIndex: 'endLunch' },
+                    { title: 'Fim de trabalho', dataIndex: 'endTimeWork' },
+                    {
+                      title: 'Faz atendimento?',
+                      dataIndex: 'isOpenWork',
+                      render: (row) => (
+                        <OperationWork open={!row.isOpenWork}>
+                          <div />
+                          <p>{row.isOpenWork ? 'Atende' : 'Não atende'}</p>
+                        </OperationWork>
+                      ),
+                    },
+                    {
+                      title: 'Ação',
+                      dataIndex: '',
+                      render: (row) => (
+                        <>
+                          <Button
+                            size="small"
+                            onClick={() => {
+                              setProviderHourEdit(row)
+                            }}
+                          >
+                            Editar
+                          </Button>
+                          {/* <NewDropdown
                         options={[
                           {
                             title: 'Editar',
@@ -307,79 +307,84 @@ const User: React.FC = () => {
                           },
                         ]}
                       /> */}
-                      </>
-                    ),
-                  },
-                ]}
-              />
-            </ContainerHourWork>
-          )}
+                        </>
+                      ),
+                    },
+                  ]}
+                />
+              </ContainerHourWork>
+            )}
 
-          <Footer modal>
-            <Button type="submit">
-              {userToEdit.id ? 'Salvar' : 'Cadastrar'}
-            </Button>
-          </Footer>
-        </Form>
+            <Footer modal>
+              <Button type="submit">
+                {userToEdit.id ? 'Salvar' : 'Cadastrar'}
+              </Button>
+            </Footer>
+          </Form>
+        </ModalContent>
       </Modal>
       <Modal
-        title="Editar hora de trabalho"
-        isOpen={providerHourEdit.id}
-        onRequestClose={() => {
-          setProviderHourEdit({});
+        open={providerHourEdit.id}
+        onOpenChange={() => {
+          setProviderHourEdit({})
         }}
       >
-        <Form
-          ref={formProviderHourRef}
-          onSubmit={handleModifyProviderHour}
-          initialData={providerHourEdit}
+        <ModalContent
+          title="Editar hora de trabalho"
+          size={userToEdit.id ? 'xl' : 'md'}
         >
-          <section>
-            <InputMask
-              mask="hour"
-              name="startTimeWork"
-              label="Inicio de trabalho"
-              placeholder="Inicio de trabalho"
-            />
-          </section>
-          <section>
-            <InputMask
-              mask="hour"
-              name="startLunch"
-              label="Inicio de almoço"
-              placeholder="Inicio de almoço"
-            />
-          </section>
-          <section>
-            <InputMask
-              mask="hour"
-              name="endLunch"
-              label="Fim de almoço"
-              placeholder="Fim de almoço"
-            />
-          </section>
-          <section>
-            <InputMask
-              mask="hour"
-              name="endTimeWork"
-              label="Fim de trabalho"
-              placeholder="Fim de trabalho"
-            />
-          </section>
-          <section>
-            <Switch name="isOpenWork" label="Faz atendimento?" />
-          </section>
-          <Footer modal>
-            <Button type="submit">Salvar</Button>
-          </Footer>
-        </Form>
+          <Form
+            ref={formProviderHourRef}
+            onSubmit={handleModifyProviderHour}
+            initialData={providerHourEdit}
+          >
+            <section>
+              <InputMask
+                mask="hour"
+                name="startTimeWork"
+                label="Inicio de trabalho"
+                placeholder="Inicio de trabalho"
+              />
+            </section>
+            <section>
+              <InputMask
+                mask="hour"
+                name="startLunch"
+                label="Inicio de almoço"
+                placeholder="Inicio de almoço"
+              />
+            </section>
+            <section>
+              <InputMask
+                mask="hour"
+                name="endLunch"
+                label="Fim de almoço"
+                placeholder="Fim de almoço"
+              />
+            </section>
+            <section>
+              <InputMask
+                mask="hour"
+                name="endTimeWork"
+                label="Fim de trabalho"
+                placeholder="Fim de trabalho"
+              />
+            </section>
+            <section>
+              <Switch name="isOpenWork" label="Faz atendimento?" />
+            </section>
+            <Footer modal>
+              <Button type="submit">Salvar</Button>
+            </Footer>
+          </Form>
+        </ModalContent>
       </Modal>
       <Header>
         <Button onClick={() => setModalVisible(true)}>Novo usuário</Button>
         <Form
           ref={formSearchRef}
-          onSubmit={data => {
-            setParams({ ...params, search: data.search, page: 1 });
+          onSubmit={(data) => {
+            setParams({ ...params, search: data.search, page: 1 })
           }}
         >
           <section>
@@ -389,11 +394,12 @@ const User: React.FC = () => {
         </Form>
       </Header>
       <ListUser>
-        {users?.map((user: User) => (
+        {users?.map((user: IUser) => (
           <Card
+            key={user.id}
             onClick={() => {
-              setModalVisible(true);
-              setUserToEdit(user);
+              setModalVisible(true)
+              setUserToEdit(user)
             }}
           >
             <img src={user?.avatar_url} alt="avatar_user" />
@@ -420,7 +426,7 @@ const User: React.FC = () => {
         </Button>
       </Footer>
     </Container>
-  );
-};
+  )
+}
 
-export default User;
+export default User

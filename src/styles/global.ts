@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
-import 'react-day-picker/dist/style.css';
+import { createGlobalStyle } from 'styled-components'
+import 'react-day-picker/dist/style.css'
 
 export const GlobalStyle: any = createGlobalStyle`
 :root {
@@ -175,6 +175,50 @@ export const GlobalStyle: any = createGlobalStyle`
     color: #fff;
   }
 
+  .teste {
+    background: rgba(212, 214, 224, 0.08);
+    border-radius: 4px;
+    border: none !important;
+    color: #434344 !important;
+    /* height: 36px; */
+    padding: 8px;
+
+    input,
+    span {
+      color: #fff;
+    }
+
+    button {
+      svg {
+        color: #fff !important;
+        stroke: #fff;
+      }
+    }
+  }
+
+  .react-date-picker__wrapper {
+    border: none;
+  }
+
+  .calendarCustom {
+    background: #323234;
+    border: none;
+  }
+
+  .react-calendar__month-view__days {
+    button {
+      color: #ff8503;
+    }
+  }
+
+  .react-calendar__month-view__days__day--weekend {
+    color: #d10000 !important;
+  }
+
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: #757575 !important;
+  }
+
 
   /* .react-datepicker__input-container{
 
@@ -205,4 +249,4 @@ export const GlobalStyle: any = createGlobalStyle`
   .react-datepicker__month-container{
     background: #7159c1;
   } */
-`;
+`

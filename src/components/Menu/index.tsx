@@ -1,8 +1,4 @@
-import React from 'react';
-
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { FiPower } from 'react-icons/fi';
-import { IoIosCut, IoIosCalendar } from 'react-icons/io';
+import React from 'react'
 import {
   FaBookOpen,
   FaBox,
@@ -12,42 +8,42 @@ import {
   FaFileArchive,
   FaSprayCan,
   FaUsers,
-} from 'react-icons/fa';
-import { IoSettings } from 'react-icons/io5';
-import {
-  Avatar,
-  Flex,
-  Heading,
-  IconButton,
-  LinkButton,
-  MenuHeader,
-  PageHeader,
-  Sidebar,
-  Text,
-  MenuTitle,
-  MenuItem,
-  SubMenu,
-  SubMenuTitle,
-  SubMenuSeparator,
-  SubMenuItem,
-} from '@atmoutsourcing/siakit';
-import PackageJSON from '../../../package.json';
-import { Container, Options, Content } from './styles';
-import { useAuth } from '../../hooks/auth';
+} from 'react-icons/fa'
+import { FiArrowDown, FiChevronDown, FiPower } from 'react-icons/fi'
+import { IoIosCut, IoIosCalendar } from 'react-icons/io'
+import { IoSettings } from 'react-icons/io5'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 
-import logoImg from '../../assets/logo.png';
+import { Avatar } from '@siakit/avatar'
+import {
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownLabel,
+  DropdownSeparator,
+  DropdownTrigger,
+} from '@siakit/dropdown'
+import { Heading } from '@siakit/heading'
+import { IconButton } from '@siakit/icon-button'
+import { Flex } from '@siakit/layout'
+import { PageHeader } from '@siakit/page-header'
+import { Text } from '@siakit/text'
+
+import PackageJSON from '../../../package.json'
+import logoImg from '../../assets/logo.png'
+import { useAuth } from '../../hooks/auth'
+import { Container, Options, Content } from './styles'
 
 type Props = {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
-
 function Menu({ children }: Props): JSX.Element {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
+  const { user, signOut } = useAuth()
+  const navigate = useNavigate()
 
   if (!user) {
-    return <>{children}</>;
+    return <>{children}</>
   }
 
   return (
@@ -127,20 +123,56 @@ function Menu({ children }: Props): JSX.Element {
       <div
         style={{ display: 'flex', overflow: 'auto', flexDirection: 'column' }}
       >
-        <PageHeader title="Barber">
-          <Flex align='center' gap={4}>
-            <Heading size='sm' >v {PackageJSON.version}</Heading>
+        <PageHeader title="Barber" as="div">
+          <Flex align="center" gap={4}>
+            <Heading size="xs" lowContrast>
+              v {PackageJSON.version}
+            </Heading>
+            <Dropdown>
+              <DropdownTrigger>
+                <Flex align="center" gap={8}>
+                  <Avatar
+                    name={user?.username}
+                    size="sm"
+                    src={user?.avatar_url}
+                  />
+                  <Text size="sm">{user?.username}</Text>
+                  <FiChevronDown />
+                </Flex>
+              </DropdownTrigger>
+              <DropdownContent>
+                <DropdownItem
+                  icon={<FiPower />}
+                  type="danger"
+                  onClick={() => {
+                    signOut()
+                    navigate('/')
+                  }}
+                >
+                  Sair do sistema
+                </DropdownItem>
+                {/* <DropdownSeparator /> */}
+                {/* <DropdownLabel /> */}
+              </DropdownContent>
+            </Dropdown>
             {/* <LinkButton onClick={() => navigate("/profile")}>{user?.username}</LinkButton> */}
-            <Avatar name={user?.username} size="sm" src={user?.avatar_url} />
-            <IconButton icon={<FiPower />} type="button" colorScheme='red' onClick={() => { signOut(); navigate('/') }} />
+
+            {/* <IconButton
+              type="button"
+              colorScheme="red"
+              onClick={() => {
+                signOut()
+                navigate('/')
+              }}
+            >
+              <FiPower />
+            </IconButton> */}
           </Flex>
         </PageHeader>
-        <Content>
-          {children}
-        </Content>
+        <Content>{children}</Content>
       </div>
     </Container>
-  );
-};
+  )
+}
 
-export default Menu;
+export default Menu

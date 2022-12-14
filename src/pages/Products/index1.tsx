@@ -1,11 +1,9 @@
-import { Flex } from "@atmoutsourcing/siakit";
+import { Flex } from '@siakit/layout'
 
 export default function Products(): JSX.Element {
   return (
     <Flex>
-      <p>
-        teste
-      </p>
+      <p>teste</p>
     </Flex>
   )
 }

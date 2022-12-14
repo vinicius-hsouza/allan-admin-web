@@ -5,7 +5,7 @@ import Button from '../../components/Button';
 import { Footer, Form } from '../../components/Form';
 import InputMask from '../../components/InputMask';
 import List from '../../components/List';
-import { Modal } from '@atmoutsourcing/siakit';
+import { Modal, ModalContent } from '@siakit/modal';
 import Switch from '../../components/Switch';
 import { useLoading } from '../../hooks/loading';
 import { useToast } from '../../hooks/toast';
@@ -86,40 +86,41 @@ export default function ConfigBarberHour(): JSX.Element {
   return (
     <Container>
       <Modal
-        title="Editar hora de trabalho"
-        isOpen={hoursBarberEdit.id}
-        onRequestClose={() => {
+        open={hoursBarberEdit.id}
+        onOpenChange={() => {
           setHoursBarberEdit({});
         }}
       >
-        <Form
-          ref={formRef}
-          onSubmit={handleModifyBarberHour}
-          initialData={hoursBarberEdit}
-        >
-          <section>
-            <InputMask
-              mask="hour"
-              name="startTimeWork"
-              label="Inicio de trabalho"
-              placeholder="Inicio de trabalho"
-            />
-          </section>
-          <section>
-            <InputMask
-              mask="hour"
-              name="endTimeWork"
-              label="Fim de trabalho"
-              placeholder="Fim de trabalho"
-            />
-          </section>
-          <section>
-            <Switch name="isOpenWork" label="Faz atendimento?" />
-          </section>
-          <Footer modal>
-            <Button type="submit">Salvar</Button>
-          </Footer>
-        </Form>
+        <ModalContent title="Editar hora de trabalho">
+          <Form
+            ref={formRef}
+            onSubmit={handleModifyBarberHour}
+            initialData={hoursBarberEdit}
+          >
+            <section>
+              <InputMask
+                mask="hour"
+                name="startTimeWork"
+                label="Inicio de trabalho"
+                placeholder="Inicio de trabalho"
+              />
+            </section>
+            <section>
+              <InputMask
+                mask="hour"
+                name="endTimeWork"
+                label="Fim de trabalho"
+                placeholder="Fim de trabalho"
+              />
+            </section>
+            <section>
+              <Switch name="isOpenWork" label="Faz atendimento?" />
+            </section>
+            <Footer modal>
+              <Button type="submit">Salvar</Button>
+            </Footer>
+          </Form>
+        </ModalContent>
       </Modal>
       <List
         data={hoursBarber}

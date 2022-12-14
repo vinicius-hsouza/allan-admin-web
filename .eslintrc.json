@@ -1,0 +1,6 @@
+{
+    "extends": "@siakit/eslint-config/react",
+    "rules": {
+        "camelcase": "off"
+    }
+}

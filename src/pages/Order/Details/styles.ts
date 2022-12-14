@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Container = styled.div`
   flex: 1;
@@ -10,14 +10,14 @@ export const Container = styled.div`
     flex: 1;
     display: flex;
   }
-`;
+`
 
 export const Content = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-`;
+`
 
 export const PaymentContainer = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ export const PaymentContainer = styled.div`
   padding: 16px;
 
   > div {
-    padding: 8px 0;
+    /* padding: 8px 0; */
 
     p {
       font-size: 14px;
@@ -39,11 +39,11 @@ export const PaymentContainer = styled.div`
       margin-top: 4px;
     }
 
-    & + div {
+    /* & + div {
       margin-top: 16px;
       border-top: 1px dashed;
       border-color: #747474;
-    }
+    } */
   }
 
   > div:first-child {
@@ -80,7 +80,7 @@ export const PaymentContainer = styled.div`
       }
     }
   }
-`;
+`
 
 export const Card = styled.div`
   background: rgba(212, 214, 224, 0.08);
@@ -91,12 +91,12 @@ export const Card = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
+`
 
 export const ServiceItem = styled.div`
   display: flex;
   justify-content: space-between;
-`;
+`
 
 export const ProductItem = styled.div`
   display: flex;
@@ -105,12 +105,12 @@ export const ProductItem = styled.div`
   p {
     margin-top: 8px;
   }
-`;
+`
 
 export const Title = styled.div`
   font-size: 20px;
   font-weight: bold;
-`;
+`
 
 export const Header = styled.div`
   display: flex;
@@ -118,7 +118,7 @@ export const Header = styled.div`
   margin-top: 16px;
   margin-bottom: 8px;
   align-items: center;
-`;
+`
 
 export const TotalContainer = styled.div`
   display: flex;
@@ -140,4 +140,4 @@ export const TotalContainer = styled.div`
       font-weight: normal;
     }
   }
-`;
+`

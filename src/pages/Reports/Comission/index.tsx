@@ -1,43 +1,44 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { registerLocale } from 'react-datepicker';
-import ptBR from 'date-fns/esm/locale/pt-BR/index.js';
-import { format } from 'date-fns';
+import React, { useEffect, useRef, useState } from 'react'
+import { registerLocale } from 'react-datepicker'
 
-import VMasker from 'vanilla-masker';
-import { FormHandles } from '@unform/core';
-import List from '../../../components/List';
+import ptBR from 'date-fns/esm/locale/pt-BR/index.js'
+import VMasker from 'vanilla-masker'
+
+import { Button } from '@siakit/button'
+import { MaskInput, Select } from '@siakit/form-unform'
+import { FormHandles } from '@unform/core'
+
 // import Button from '../../../components/Button';
-import ButtonCSV from '../../../components/ButtonCSV';
-import { Form } from '../../../components/Form';
-import InputMask from '../../../components/InputMask';
+import ButtonCSV from '../../../components/ButtonCSV'
+import { Form } from '../../../components/Form'
+import List from '../../../components/List'
 // import Select from '../../../components/Select';
 
-import { Container, Header } from './styles';
-import api from '../../../services/api';
-import { Spin } from '../../../components/Spin';
-import { date, datetime, real } from '../../../utils/especialFormats';
-import { MaskInput, Select, Button } from '@atmoutsourcing/siakit';
+import { Spin } from '../../../components/Spin'
+import api from '../../../services/api'
+import { date, datetime, real } from '../../../utils/especialFormats'
+import { Container, Header } from './styles'
 
 type Provider = {
-  id: string;
-  username: string;
-};
+  id: string
+  username: string
+}
 
 export default function ReportCommision(): JSX.Element {
-  const formRef = useRef<FormHandles>(null);
+  const formRef = useRef<FormHandles>(null)
 
-  const [reportData, setReportData] = useState<any>([]);
-  const [loading, setLoading] = useState(false);
-  const [providers, setProviders] = useState<Provider[]>([]);
+  const [reportData, setReportData] = useState<any>([])
+  const [loading, setLoading] = useState(false)
+  const [providers, setProviders] = useState<Provider[]>([])
 
   useEffect(() => {
-    registerLocale('ptBR', ptBR);
-  }, []);
+    registerLocale('ptBR', ptBR)
+  }, [])
 
   async function getReport(data: any): Promise<void> {
     try {
-      setLoading(true);
-      const [month, year] = data.month.split('/');
+      setLoading(true)
+      const [month, year] = data.month.split('/')
 
       const response = await api.get('/report/commision', {
         params: {
@@ -45,24 +46,24 @@ export default function ReportCommision(): JSX.Element {
           year,
           provider_id: data.providerId,
         },
-      });
-      setReportData(response.data);
+      })
+      setReportData(response.data)
     } catch (err: any) {
-      console.log(err);
+      console.log(err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   async function loadProviders(): Promise<void> {
     try {
-      setLoading(true);
-      const response = await api.get('/users/provider');
-      setProviders(response.data);
+      setLoading(true)
+      const response = await api.get('/users/provider')
+      setProviders(response.data)
     } catch (err: any) {
-      console.log(err);
+      console.log(err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
@@ -76,15 +77,15 @@ export default function ReportCommision(): JSX.Element {
       Comissão: `${reportItem.percentageCommission}%`,
       'Valor Total': real(reportItem.totalValue),
       'Valor de Comissão': real(reportItem.commissionValue),
-    }));
+    }))
     // setLoading(false);
 
-    return dataFormatted;
+    return dataFormatted
   }
 
   useEffect(() => {
-    loadProviders();
-  }, []);
+    loadProviders()
+  }, [])
 
   return (
     <Spin isVisible={loading}>
@@ -106,7 +107,7 @@ export default function ReportCommision(): JSX.Element {
                   // width="300px"
                   // label="Prestador"
                   placeholder="Selecione o prestador"
-                  options={providers.map(provider => ({
+                  options={providers.map((provider) => ({
                     value: provider.id,
                     label: provider.username,
                   }))}
@@ -117,7 +118,7 @@ export default function ReportCommision(): JSX.Element {
                   placeholder="Digite o mês e o ano"
                 />
                 <Button
-                  type='button'
+                  type="button"
                   onClick={() => formRef.current?.submitForm()}
                 >
                   Buscar
@@ -139,9 +140,9 @@ export default function ReportCommision(): JSX.Element {
               dataIndex: 'type',
               render: (row: any) => {
                 if (row.type) {
-                  return row.type === 'SERVICE' ? 'Serviço' : 'Produto';
+                  return row.type === 'SERVICE' ? 'Serviço' : 'Produto'
                 }
-                return '';
+                return ''
               },
             },
             { title: 'Nome', dataIndex: 'name' },
@@ -151,9 +152,9 @@ export default function ReportCommision(): JSX.Element {
               dataIndex: 'percentageCommission',
               render: (row: any) => {
                 if (row.percentageCommission) {
-                  return `${row.percentageCommission}%`;
+                  return `${row.percentageCommission}%`
                 }
-                return '';
+                return ''
               },
             },
             {
@@ -166,9 +167,9 @@ export default function ReportCommision(): JSX.Element {
                     separator: ',',
                     delimiter: '.',
                     unit: 'R$',
-                  });
+                  })
                 }
-                return '';
+                return ''
               },
             },
             {
@@ -181,14 +182,14 @@ export default function ReportCommision(): JSX.Element {
                     separator: ',',
                     delimiter: '.',
                     unit: 'R$',
-                  });
+                  })
                 }
-                return '';
+                return ''
               },
             },
           ]}
         />
       </Container>
     </Spin>
-  );
+  )
 }
