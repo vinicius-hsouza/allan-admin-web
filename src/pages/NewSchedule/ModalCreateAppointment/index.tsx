@@ -578,7 +578,7 @@ export default function ModalCreateAppointment({
                     onMonthChange={setMothSelected}
                     onDayClick={setSelectedDate}
                     modifiers={{
-                      disabled: disabledDays,
+                      disabled: fit ? null : disabledDays,
                     }}
                     disabled={disabledDays}
                     weekStartsOn={1}
