@@ -16,8 +16,6 @@ import { Flex } from '@siakit/layout'
 import { Modal, ModalContent } from '@siakit/modal'
 import { Text } from '@siakit/text'
 
-import { useLoading } from '../../../hooks/loading'
-import { useToast } from '../../../hooks/toast'
 import {
   CardAppointment,
   CardAppointmentContent,
@@ -41,7 +39,7 @@ export default function Item({
   onCancelAppointment,
   onCancelBloqued,
   onCostumerMissedAppointment,
-}: Props): JSX.Element {
+}: Props) {
   const [modalInfoAppointmentVisible, setModalInfoAppointmentVisible] =
     useState(false)
   const [modalInfoBloquedVisible, setModalInfoBloquedVisible] = useState(false)
@@ -52,7 +50,6 @@ export default function Item({
         <Modal
           open={modalInfoAppointmentVisible}
           onOpenChange={() => setModalInfoAppointmentVisible(false)}
-          css={{ zIndex: 10 }}
         >
           <ModalContent title="Informaçōes do agendamento" size="md">
             <ContainerModalInfoAppointment>

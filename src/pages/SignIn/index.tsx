@@ -1,6 +1,5 @@
 import React, { useRef, useCallback } from 'react'
-import { FiLogIn, FiMail, FiLock, FiPhone } from 'react-icons/fi'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import * as Yup from 'yup'
 
@@ -8,17 +7,14 @@ import { Button } from '@siakit/button'
 import { MaskInput, PasswordInput } from '@siakit/form-unform'
 import { Heading } from '@siakit/heading'
 import { Flex } from '@siakit/layout'
-import { Spacer } from '@siakit/spacer'
 import { FormHandles } from '@unform/core'
 
 import logoImg from '../../assets/logo.png'
 import { Form } from '../../components/Form'
-import Input from '../../components/Input'
-import InputMask from '../../components/InputMask'
 import { useAuth } from '../../hooks/auth'
 import { useToast } from '../../hooks/toast'
 import getValidationErrors from '../../utils/getValidationErrors'
-import { Container, Content, AnimationContainer, Background } from './styles'
+import { Container, Content, AnimationContainer } from './styles'
 
 interface SignInFormData {
   phone: string
@@ -90,12 +86,7 @@ const SignIn: React.FC = () => {
           <Heading size="sm">Acesse</Heading>
           <Form ref={formRef} onSubmit={handleSubmit} aria-autocomplete="none">
             <Flex direction="column" gap>
-              <MaskInput
-                mask="phone"
-                name="phone"
-                placeholder="celular"
-                mask="phone"
-              />
+              <MaskInput mask="phone" name="phone" placeholder="celular" />
 
               <PasswordInput name="password" placeholder="Senha" />
 

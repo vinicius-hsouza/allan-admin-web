@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import DatePicker from 'react-date-picker'
-import { FiArrowRight, FiUser } from 'react-icons/fi'
+import { FiArrowRight } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 
 import { format } from 'date-fns'
@@ -8,7 +8,6 @@ import { format } from 'date-fns'
 import { Avatar } from '@siakit/avatar'
 import { Button } from '@siakit/button'
 import { Select, Switch } from '@siakit/form-unform'
-import { IconButton } from '@siakit/icon-button'
 import { Flex } from '@siakit/layout'
 import { useLoading } from '@siakit/loading'
 import { Modal, ModalContent } from '@siakit/modal'
@@ -18,15 +17,15 @@ import { FormHandles } from '@unform/core'
 
 // import Button from '../../components/Button'
 import { Footer, Form } from '../../components/Form'
-import List from '../../components/List'
+
 // import Select from '../../components/Select'
-import { Spin } from '../../components/Spin'
+
 // import Switch from '../../components/Switch'
 import { useToast } from '../../hooks/toast'
 import api from '../../services/api'
-import { Container, Status, Header, ButtonToday } from './styles'
+import { Status } from './styles'
 
-export default function Order(): JSX.Element {
+export default function Order() {
   const navigate = useNavigate()
   const formRef = useRef<FormHandles>(null)
   const { addToast } = useToast()
@@ -271,8 +270,10 @@ export default function Order(): JSX.Element {
           {
             label: 'Profissional',
             dataIndex: 'id',
-            render: (row) => {
-              return row.appointment?.provider?.username || 'Atendimento Balcão'
+            render: ({ item }: any) => {
+              return (
+                item.appointment?.provider?.username || 'Atendimento Balcão'
+              )
             },
           },
           {
