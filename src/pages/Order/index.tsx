@@ -7,6 +7,7 @@ import { format } from 'date-fns'
 
 import { Avatar } from '@siakit/avatar'
 import { Button } from '@siakit/button'
+import { DatePicker as DatePickerSIA } from '@siakit/form-components'
 import { Select, Switch } from '@siakit/form-unform'
 import { Flex } from '@siakit/layout'
 import { useLoading } from '@siakit/loading'
@@ -32,7 +33,7 @@ export default function Order() {
   const { setLoading } = useLoading()
   const [orders, setOrders] = useState([])
 
-  const [dateSelected, setDateSelected] = useState(new Date())
+  const [dateSelected, setDateSelected] = useState<Date>(new Date())
   const [finished, setFinished] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const [users, setUsers] = useState([])
@@ -182,19 +183,23 @@ export default function Order() {
               Hoje
             </ButtonToday> */}
           <Button
-            colorScheme="gray"
+            variant="secondary"
             onClick={() => setDateSelected(new Date())}
           >
             Hoje
           </Button>
 
-          <DatePicker
+          {/* <DatePicker
             className="teste"
             calendarClassName="calendarCustom"
             onChange={setDateSelected}
             value={dateSelected}
             format="dd/MM/yyyy"
             calendarIcon={null}
+          /> */}
+          <DatePickerSIA
+            onChange={(date) => setDateSelected(date as Date)}
+            value={dateSelected}
           />
         </Flex>
       </Flex>
