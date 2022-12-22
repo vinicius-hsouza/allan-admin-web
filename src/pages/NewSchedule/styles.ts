@@ -39,7 +39,7 @@ export const Content = styled.div<ContentProps>`
   display: grid;
   grid-template-columns: 64px repeat(
       ${(props) => props.columns},
-      minmax(400px, 1fr)
+      minmax(300px, 1fr)
     );
   grid-template-rows: 64px;
 `
@@ -78,7 +78,7 @@ export const CardBloquedContent = styled.div<CardAppointmentProps>`
   background: rgb(52, 50, 51);
   flex: 1;
   border-radius: 8px;
-  z-index: 10;
+  z-index: 0;
   padding: 8px;
 
   display: flex;
@@ -107,7 +107,7 @@ export const CardLunchContent = styled.div<CardAppointmentProps>`
   background: rgba(35, 123, 195, 0.4);
   flex: 1;
   border-radius: 8px;
-  z-index: 10;
+  z-index: 0;
   padding: 8px;
 
   display: flex;
@@ -210,7 +210,7 @@ export const CardAppointmentContent = styled.div<CardAppointmentContentProps>`
 export const SpanLine = styled.div`
   border: 0.01px solid rgb(52, 50, 51);
   width: 100%;
-  min-width: 200px;
+  min-width: 100px;
   position: relative;
   display: flex;
   /* 
@@ -219,13 +219,14 @@ export const SpanLine = styled.div`
 `
 
 export const SpanLineHeader = styled.div`
+  /* grid-column: 2 / 4; */
   border: 0.01px solid rgb(52, 50, 51);
   width: 100%;
   background: #202025;
   position: sticky;
   top: 0;
   padding: 8px;
-  z-index: 0;
+  z-index: 2;
 
   border-radius: 8px 8px 0 0;
 

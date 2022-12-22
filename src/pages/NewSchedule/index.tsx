@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { IoChevronBack, IoChevronForward, IoReload } from 'react-icons/io5'
 
 import {
@@ -11,6 +11,17 @@ import {
 import { ptBR } from 'date-fns/locale'
 
 import { Avatar } from '@siakit/avatar'
+import { Badge } from '@siakit/badge'
+import { Button as ButtonSIA } from '@siakit/button'
+import { DatePicker as DatePickerSIA } from '@siakit/form-components'
+import {
+  Checkbox,
+  Switch,
+  // DatePicker as DatePickerSIA,
+} from '@siakit/form-unform'
+import { IconButton } from '@siakit/icon-button'
+import { Flex } from '@siakit/layout'
+import { Text } from '@siakit/text'
 import { FormHandles } from '@unform/core'
 
 import Button from '../../components/Button'
@@ -37,6 +48,7 @@ export default function NewSchedule(): JSX.Element {
   const { setLoading } = useLoading()
   const { addToast } = useToast()
   const formRef = useRef<FormHandles>(null)
+  const formFitRef = useRef<FormHandles>(null)
 
   const [providers, setProviders] = useState([])
   const [itemsSchedule, setItemsSchedule] = useState<ItemSchedule[]>([])
@@ -45,6 +57,26 @@ export default function NewSchedule(): JSX.Element {
     useState(false)
 
   const [modalNewBloquedVisible, setModalNewBloquedVisible] = useState(false)
+  const [appointmentsFitVisible, setAppointmentsFitVisible] = useState(false)
+
+  const appointmentsFitAmount = useMemo(() => {
+    if (itemsSchedule.length) {
+      const total = itemsSchedule.reduce((previusValue, currentValue) => {
+        if (
+          currentValue.type === 'appointment' &&
+          currentValue?.appointment?.fit
+        ) {
+          return previusValue + 1
+        }
+
+        return previusValue
+      }, 0)
+
+      return total
+    }
+
+    return 0
+  }, [itemsSchedule])
 
   async function loadItems(): Promise<void> {
     try {
@@ -238,35 +270,62 @@ export default function NewSchedule(): JSX.Element {
       />
 
       <Container>
-        <Header>
-          <div>
-            <Button
+        <Flex flex justify="between" margin="0 16px 16px 64px">
+          <Flex gap={8}>
+            <ButtonSIA
               onClick={() => {
                 setModalNewAppointmentVisible(true)
               }}
             >
               Novo Agendamento
-            </Button>
-            <Button
-              color="danger"
+            </ButtonSIA>
+            <ButtonSIA
+              colorScheme="red"
               onClick={() => {
                 setModalNewBloquedVisible(true)
               }}
             >
               Novo Bloqueio
-            </Button>
-          </div>
+            </ButtonSIA>
+          </Flex>
 
-          <div>
-            <Button
+          <Flex gap={8}>
+            <Flex style={{ position: 'relative' }}>
+              <ButtonSIA
+                variant="secondary"
+                colorScheme={appointmentsFitVisible ? 'orange' : 'gray'}
+                onClick={() =>
+                  setAppointmentsFitVisible((prevState) => !prevState)
+                }
+              >
+                Mostrar encaixes
+              </ButtonSIA>
+              <div style={{ position: 'absolute', left: -12, top: 6 }}>
+                <Badge color="red">{appointmentsFitAmount}</Badge>
+              </div>
+            </Flex>
+            <ButtonSIA
+              variant="secondary"
               onClick={() => {
                 setDateSelected(new Date())
                 formRef.current?.setFieldValue('date', new Date())
               }}
             >
               Hoje
-            </Button>
-            <Button
+            </ButtonSIA>
+            <IconButton
+              colorScheme="gray"
+              variant="secondary"
+              onClick={() => {
+                const date = subDays(dateSelected, 1)
+                setDateSelected(date)
+                formRef.current?.setFieldValue('newdate', date)
+                console.log(date)
+              }}
+            >
+              <IoChevronBack size={18} />
+            </IconButton>
+            {/* <Button
               onClick={() => {
                 const date = subDays(dateSelected, 1)
                 setDateSelected(date)
@@ -279,21 +338,31 @@ export default function NewSchedule(): JSX.Element {
               }}
             >
               <IoChevronBack size={18} />
-            </Button>
-            <Form
+            </Button> */}
+            {/* <Form
               ref={formRef}
               onSubmit={() => undefined}
               initialData={
-                dateSelected && { date: format(dateSelected, 'dd/MM/yyyy') }
+                dateSelected && {
+                  // date: format(dateSelected, 'dd/MM/yyyy'),
+                  newdate: dateSelected,
+                }
               }
-            >
-              <DatePicker
+            > */}
+            {/* <DatePicker
                 name="date"
                 placeholder="Selecione a data"
                 onDateSelected={(value) => setDateSelected(value)}
+              /> */}
+            {/* </Form> */}
+            <Flex maxWidth={250}>
+              <DatePickerSIA
+                value={dateSelected}
+                placeholder="Selecione a data"
+                onChange={(date) => setDateSelected(date as Date)}
               />
-            </Form>
-            <Button
+            </Flex>
+            {/* <Button
               onClick={() => {
                 const date = addDays(dateSelected, 1)
                 setDateSelected(date)
@@ -307,8 +376,27 @@ export default function NewSchedule(): JSX.Element {
               }}
             >
               <IoChevronForward size={18} />
-            </Button>
-            <Button
+            </Button> */}
+            <IconButton
+              colorScheme="gray"
+              variant="secondary"
+              onClick={() => {
+                const date = addDays(dateSelected, 1)
+                setDateSelected(date)
+                formRef.current?.setFieldValue('date', date)
+              }}
+            >
+              <IoChevronForward size={18} />
+            </IconButton>
+            <IconButton
+              variant="secondary"
+              onClick={() => {
+                loadItems()
+              }}
+            >
+              <IoReload size={18} />
+            </IconButton>
+            {/* <Button
               onClick={() => {
                 loadItems()
               }}
@@ -320,11 +408,15 @@ export default function NewSchedule(): JSX.Element {
               }}
             >
               <IoReload size={18} />
-            </Button>
-          </div>
-        </Header>
+            </Button> */}
+          </Flex>
+        </Flex>
         <div style={{ overflow: 'auto' }}>
-          <Content columns={providers.length}>
+          <Content
+            columns={
+              appointmentsFitVisible ? providers.length * 2 : providers.length
+            }
+          >
             <span
               style={{
                 width: '100%',
@@ -338,8 +430,18 @@ export default function NewSchedule(): JSX.Element {
                 // background: '#202025',
               }}
             />
-            {providers.map((item: any) => (
-              <SpanLineHeader key={item.id}>
+
+            {providers.map((item: any, index: number) => (
+              <SpanLineHeader
+                key={item.id}
+                style={
+                  appointmentsFitVisible
+                    ? {
+                      gridColumn: `${(index + 1) * 2} / span 2`,
+                    }
+                    : {}
+                }
+              >
                 <div>
                   <Avatar src={item?.avatar_url} name={item?.username} />
                   <p>{item?.username}</p>
@@ -372,45 +474,75 @@ export default function NewSchedule(): JSX.Element {
                   >
                     {String(hour).padStart(2, '0')}:
                     {String(minute).padStart(2, '0')}
-                    {/* {String(index + 8).padStart(2, '0')}:{(index + 8) % 2 === 0 ? '00' : '30'} */}
                   </p>
-                  {/* <p
-                    style={{
-                      position: 'absolute',
-                      top: 56,
-                      right: 4,
-                      fontSize: 14,
-                      // color: '#737373',
-                      color: '#aeb4b0',
-                    }}
-                  >
-                    {String(index + 8).padStart(2, '0')}:30
-                  </p> */}
                 </span>
-                {providers.map((provider: any) => (
-                  <SpanLine key={provider.id}>
-                    {itemsSchedule?.map((item: any) => {
-                      if (
-                        new Date(item.date).getHours() === hour &&
-                        new Date(item.date).getMinutes() === minute &&
-                        item.provider_id === provider.id
-                      ) {
-                        return (
-                          <Item
-                            key={item.id}
-                            data={item}
-                            onCostumerMissedAppointment={
-                              handleCostumerMissedAppointment
-                            }
-                            onCancelAppointment={handleCancelAppointment}
-                            onCancelBloqued={handleCancelBloquedTime}
-                          />
-                        )
+                {providers.map((provider: any, index: number) => (
+                  <>
+                    <SpanLine
+                      key={provider.id}
+                      style={
+                        appointmentsFitVisible
+                          ? {
+                            gridColumn: `${(index + 1) * 2} / span 1`,
+                          }
+                          : {}
                       }
+                    >
+                      {itemsSchedule?.map((item: any) => {
+                        if (
+                          new Date(item.date).getHours() === hour &&
+                          new Date(item.date).getMinutes() === minute &&
+                          item.provider_id === provider.id &&
+                          !item.appointment?.fit
+                        ) {
+                          return (
+                            <Item
+                              key={item.id}
+                              data={item}
+                              onCostumerMissedAppointment={
+                                handleCostumerMissedAppointment
+                              }
+                              onCancelAppointment={handleCancelAppointment}
+                              onCancelBloqued={handleCancelBloquedTime}
+                            />
+                          )
+                        }
 
-                      return <></>
-                    })}
-                  </SpanLine>
+                        return <></>
+                      })}
+                    </SpanLine>
+                    {appointmentsFitVisible && (
+                      <SpanLine
+                        key={provider.id}
+                        style={{
+                          gridColumn: `${(index + 1) * 2 + 1} / span 1`,
+                        }}
+                      >
+                        {itemsSchedule?.map((item: any) => {
+                          if (
+                            new Date(item.date).getHours() === hour &&
+                            new Date(item.date).getMinutes() === minute &&
+                            item.provider_id === provider.id &&
+                            item.appointment?.fit
+                          ) {
+                            return (
+                              <Item
+                                key={item.id}
+                                data={item}
+                                onCostumerMissedAppointment={
+                                  handleCostumerMissedAppointment
+                                }
+                                onCancelAppointment={handleCancelAppointment}
+                                onCancelBloqued={handleCancelBloquedTime}
+                              />
+                            )
+                          }
+
+                          return <></>
+                        })}
+                      </SpanLine>
+                    )}
+                  </>
                 ))}
               </>
             ))}
